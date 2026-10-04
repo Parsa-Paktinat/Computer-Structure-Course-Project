@@ -48,19 +48,19 @@ PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition
 ```text
 Computer-Structure-Course-Project/
 ├── README.md
-├── src/                    # Schematic circuit files (.dig)
-│   ├── CPU.dig             # Top-level processor schematic
-│   ├── ALU.dig             # 16-bit ALU and flag generator
-│   ├── RegisterFile.dig         # 8x16-bit Register File with debug ports
-│   └── ControlUnit.dig    # Main decoder and condition evaluation logic
-├── tests/             # Test vectors and testbench setups
+├── src/                       # Schematic circuit files (.dig)
+│   ├── CPU.dig                # Top-level processor schematic
+│   ├── ALU.dig                # 16-bit ALU and flag generator
+│   ├── RegisterFile.dig       # 8x16-bit Register File with debug ports
+│   └── ControlUnit.dig        # Main decoder and condition evaluation logic
+├── tests/                     # Test vectors and testbench setups
 │   ├── CPU__T1_protocol.dig
 │   ├── CPU__T2_isa.dig
 │   ├── CPU__T3_sum.dig
 │   ├── CPU__T4_sort.dig
 │   ├── CPU__T5_branch.dig
 │   └── use_of_test_cases.txt   # Guide to using tests
-├── docs/                   # Course assignment specification      
+├── docs/                       # Course assignment specification      
 │   └── CS_Project_v3.pdf
 ```
 
@@ -69,10 +69,7 @@ Computer-Structure-Course-Project/
 Each test fixture runs against the top-level `CPU.dig` using the Digital CLI:
 
 ```bash
-java -cp "C:\path\to\Digital.jar" CLI test ^
-  -circ C:/path/to/src/CPU.dig ^
-  -tests C:/path/to/tests/CPU__T2_isa.dig ^
-  -allowMissingInputs
+java -cp "C:\path\to\your\Digital.jar" CLI test -circ C:/path/to/top/level/CPU.dig -tests C:/path/to/tests/(e.g.)CPU__T2_isa.dig -allowMissingInputs
 ```
 
 See [tests/use_of_test_cases.txt](tests/use_of_test_cases.txt) for details. The five fixtures cover the debug-interface protocol, the full ISA, a summation program, a sorting program, and branch/jump behavior.
