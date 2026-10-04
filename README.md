@@ -68,6 +68,15 @@ Computer-Structure-Course-Project/
 
 Each test fixture runs against the top-level `CPU.dig` using the Digital CLI:
 
+```bash
+java -cp "C:\path\to\Digital.jar" CLI test ^
+  -circ C:/path/to/src/CPU.dig ^
+  -tests C:/path/to/tests/CPU__T2_isa.dig ^
+  -allowMissingInputs
+```
+
+See [tests/use_of_test_cases.txt](tests/use_of_test_cases.txt) for details. The five fixtures cover the debug-interface protocol, the full ISA, a summation program, a sorting program, and branch/jump behavior.
+
 ## Results
 
 * Successfully verified all 16 instructions (arithmetic, logic, memory access LW/SW, immediate loading MOVI/LUI, and branching/jumps B/JAL/JR) with single-cycle execution.
