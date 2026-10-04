@@ -1,6 +1,6 @@
 # PARS-16: 16-Bit Processor Design
 
-A course project completed for **Computer Structure (EE 25-754)** at Sharif University of Technology.
+A course project completed for **Computer Structure (EE 25-754)** at EE department, Sharif University of Technology.
 
 ## Overview
 
@@ -81,5 +81,8 @@ See [tests/use_of_test_cases.txt](tests/use_of_test_cases.txt) for details. The 
 * Leveraged AI tools to accelerate edge-case test plan formulation, assembly test vector creation, and control-hazard debugging.
 * Validated end-to-end functionality across corner cases, subroutine linkages (JAL/JR), and memory operations.
 
-## Notes
-This project was completed as part of coursework at EE department, Sharif University of Technology.
+## Credits
+
+|  Student Name  |        School      |
+| :------------- | :----------------- |
+| Parsa Paktinat | EE Department, Sharif University of Technology |
