@@ -18,21 +18,21 @@ PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition
 
 | Opcode | Mnemonic | Type | Format / Fields | Operation |
 |:---:|:---:|:---:|:---|:---|
-| `0000` | **ADD**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 + Rs2$ |
-| `0001` | **SUB**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 - Rs2$ |
-| `0010` | **AND**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ \& \ Rs2$ |
-| `0011` | **OR**   | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ \| \ Rs2$ |
-| `0100` | **XOR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \oplus Rs2$ |
-| `0101` | **SHL**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ll Rs2[3:0]$ |
-| `0110` | **SHR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \gg Rs2[3:0]$ |
-| `0111` | **ADDI** | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $Rd \leftarrow Rs1 + \text{sext}(Imm4)$ |
-| `1000` | **LW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $Rd \leftarrow \text{MEM}[Rs1 + \text{sext}(Imm4)]$ |
-| `1001` | **SW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $\text{MEM}[Rs1 + \text{sext}(Imm4)] \leftarrow Rs2$ |
-| `1010` | **MOVI** | M  | `CC, Opcode, Rd, Imm7`        | $Rd \leftarrow \text{sext}(Imm7)$ |
-| `1011` | **LUI**  | M  | `CC, Opcode, Rd, Imm7`        | $Rd \leftarrow Imm7 \ll 9$ |
-| `1100` | **B**    | B  | `CC, Opcode, Offset10`        | $PC \leftarrow (PC + 1 + \text{sext}(Offset10)) \pmod{256}$ |
-| `1101` | **JAL**  | J  | `CC, Opcode, Offset10`        | $R7 \leftarrow PC + 1$; Branch to Target |
-| `1110` | **JR**   | JR | `CC, Opcode, Rs1`             | $PC \leftarrow Rs1[7:0]$ |
+| `0000` | **ADD**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 + Rs2` |
+| `0001` | **SUB**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 − Rs2` |
+| `0010` | **AND**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 & Rs2` |
+| `0011` | **OR**   | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 \| Rs2` |
+| `0100` | **XOR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 ⊕ Rs2` |
+| `0101` | **SHL**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 << Rs2[3:0]` |
+| `0110` | **SHR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | `Rd ← Rs1 >> Rs2[3:0]` |
+| `0111` | **ADDI** | I  | `CC, Opcode, Rd, Rs1, Imm4`   | `Rd ← Rs1 + sext(Imm4)` |
+| `1000` | **LW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | `Rd ← MEM[Rs1 + sext(Imm4)]` |
+| `1001` | **SW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | `MEM[Rs1 + sext(Imm4)] ← Rs2` |
+| `1010` | **MOVI** | M  | `CC, Opcode, Rd, Imm7`        | `Rd ← sext(Imm7)` |
+| `1011` | **LUI**  | M  | `CC, Opcode, Rd, Imm7`        | `Rd ← Imm7 << 9` |
+| `1100` | **B**    | B  | `CC, Opcode, Offset10`        | `PC ← (PC + 1 + sext(Offset10)) mod 256` |
+| `1101` | **JAL**  | J  | `CC, Opcode, Offset10`        | `R7 ← PC + 1`; Branch to Target |
+| `1110` | **JR**   | JR | `CC, Opcode, Rs1`             | `PC ← Rs1[7:0]` |
 | `1111` | **NOP**  | I  | `CC, Opcode, ...`             | No operation |
 
 > **Synthesized Pseudo-Instructions:** `CMP Rs1, Rs2` $\rightarrow$ `SUB R0, Rs1, Rs2, S`, `MOV Rd, Rs` $\rightarrow$ `ADD Rd, Rs, R0`, `RET` $\rightarrow$ `JR R7`.
@@ -46,20 +46,28 @@ PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition
 
 ## Project Structure
 ```text
-pars-16-processor/
+Computer-Structure-Course-Project/
 ├── README.md
 ├── src/                    # Schematic circuit files (.dig)
-│   ├── top.dig             # Top-level processor schematic
-│   ├── datapath.dig        # Datapath integration
-│   ├── alu.dig             # 16-bit ALU and flag generator
-│   ├── regfile.dig         # 8x16-bit Register File with debug ports
-│   └── control_unit.dig    # Main decoder and condition evaluation logic
-├── simulation/             # Test vectors and testbench setups
-│   ├── test_basic.dig
-│   └── test_programs.hex   # Machine code binaries for IMEM
-├── results/                # Waveforms, execution traces, and schematics
-└── docs/                   # Course assignment specification (CS_Project_v3.pdf)
+│   ├── CPU.dig             # Top-level processor schematic
+│   ├── ALU.dig             # 16-bit ALU and flag generator
+│   ├── RegisterFile.dig         # 8x16-bit Register File with debug ports
+│   └── ControlUnit.dig    # Main decoder and condition evaluation logic
+├── tests/             # Test vectors and testbench setups
+│   ├── CPU__T1_protocol.dig
+│   ├── CPU__T2_isa.dig
+│   ├── CPU__T3_sum.dig
+│   ├── CPU__T4_sort.dig
+│   ├── CPU__T5_branch.dig
+│   └── use_of_test_cases.txt   # Guide to using tests
+├── docs/                   # Course assignment specification      
+│   └── CS_Project_v3.pdf
 ```
+
+## Testing
+
+Each test fixture runs against the top-level `CPU.dig` using the Digital CLI:
+
 ## Results
 
 * Successfully verified all 16 instructions (arithmetic, logic, memory access LW/SW, immediate loading MOVI/LUI, and branching/jumps B/JAL/JR) with single-cycle execution.

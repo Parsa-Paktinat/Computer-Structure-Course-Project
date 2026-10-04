@@ -1,0 +1,2 @@
+Run this command for each test:
+java -cp "C:\path\to\your\Digital.jar" CLI test -circ C:/path/to/top/level/CPU.dig -tests C:/path/to/tests/(e.g.)CPU__T2_isa.dig -allowMissingInputs
