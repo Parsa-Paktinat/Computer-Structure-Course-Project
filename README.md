@@ -42,7 +42,6 @@ PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition
 * **Digital (by H. Neemann):** Digital logic schematic capture and cycle-accurate circuit simulation (`.dig`).
 * **Assembly / Machine Code:** Hand-assembled machine code and test programs for custom 16-bit instruction formats (R, I, M, B, J, JR types).
 * **AI-Assisted Engineering:** Leveraged LLMs for logic design brainstorming, edge-case test vector generation, and control signal verification.
-* **Git:** Version control and project artifact tracking.
 
 ## Project Structure
 ```text
@@ -73,12 +72,6 @@ java -cp "C:\path\to\your\Digital.jar" CLI test -circ C:/path/to/top/level/CPU.d
 ```
 
 See [tests/use_of_test_cases.txt](tests/use_of_test_cases.txt) for details. The five fixtures cover the debug-interface protocol, the full ISA, a summation program, a sorting program, and branch/jump behavior.
-
-## Results
-
-* Successfully verified all 16 instructions (arithmetic, logic, memory access LW/SW, immediate loading MOVI/LUI, and branching/jumps B/JAL/JR) with single-cycle execution.
-* Passed automated verification tests via the integrated hardware debug interface (DBG_EN, DBG_RSEL, MADDR_DBG).
-* Demonstrated correct program counter wrapping (mod 256), sign-extension operations, and predicated flag-update logic (S-bit gating).
 
 ## My Contributions
 
