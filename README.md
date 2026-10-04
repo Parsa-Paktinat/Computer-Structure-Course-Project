@@ -1,2 +1,78 @@
-# computer-architecture-course-project
-Design and implementation of PARS-16 processor with Digital software
+# PARS-16: 16-Bit Processor Design
+
+A course project completed for **Computer Structure (EE 25-754)** at Sharif University of Technology.
+
+## Overview
+
+Designed and implemented **PARS-16**, a custom 16-bit single-cycle RISC-like processor based on the Harvard architecture. The processor features an 8-bit program counter, an 8-register register file, and ARM-style predicated execution via condition codes and status flags (Z, N, C, V). The complete datapath, control unit, and memory interfaces were modeled, simulated, and verified in the *Digital* logic design environment.
+
+## Objectives
+
+* Design a functional 16-bit single-cycle datapath and hardwired control unit supporting a complete 16-instruction custom ISA.
+* Implement conditional (predicated) execution using a dedicated 4-bit status register (Z, N, C, V) and 2-bit condition codes (`AL`, `EQ`, `LT`, `VS`).
+* Build a robust hardware debugging interface (register file and data memory probe ports) to validate program execution against automated test suites.
+
+## Instruction Set Architecture (ISA)
+
+PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition code (`AL`, `EQ`, `LT`, `VS`) and bits `[13:10]` specify the opcode.
+
+| Opcode | Mnemonic | Type | Format / Fields | Operation |
+|:---:|:---:|:---:|:---|:---|
+| `0000` | **ADD**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 + Rs2$ |
+| `0001` | **SUB**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 - Rs2$ |
+| `0010` | **AND**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ \& \ Rs2$ |
+| `0011` | **OR**   | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ \| \ Rs2$ |
+| `0100` | **XOR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \oplus Rs2$ |
+| `0101` | **SHL**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \ll Rs2[3:0]$ |
+| `0110` | **SHR**  | R  | `CC, Opcode, Rd, Rs1, Rs2, S` | $Rd \leftarrow Rs1 \gg Rs2[3:0]$ |
+| `0111` | **ADDI** | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $Rd \leftarrow Rs1 + \text{sext}(Imm4)$ |
+| `1000` | **LW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $Rd \leftarrow \text{MEM}[Rs1 + \text{sext}(Imm4)]$ |
+| `1001` | **SW**   | I  | `CC, Opcode, Rd, Rs1, Imm4`   | $\text{MEM}[Rs1 + \text{sext}(Imm4)] \leftarrow Rs2$ |
+| `1010` | **MOVI** | M  | `CC, Opcode, Rd, Imm7`        | $Rd \leftarrow \text{sext}(Imm7)$ |
+| `1011` | **LUI**  | M  | `CC, Opcode, Rd, Imm7`        | $Rd \leftarrow Imm7 \ll 9$ |
+| `1100` | **B**    | B  | `CC, Opcode, Offset10`        | $PC \leftarrow (PC + 1 + \text{sext}(Offset10)) \pmod{256}$ |
+| `1101` | **JAL**  | J  | `CC, Opcode, Offset10`        | $R7 \leftarrow PC + 1$; Branch to Target |
+| `1110` | **JR**   | JR | `CC, Opcode, Rs1`             | $PC \leftarrow Rs1[7:0]$ |
+| `1111` | **NOP**  | I  | `CC, Opcode, ...`             | No operation |
+
+> **Synthesized Pseudo-Instructions:** `CMP Rs1, Rs2` $\rightarrow$ `SUB R0, Rs1, Rs2, S`, `MOV Rd, Rs` $\rightarrow$ `ADD Rd, Rs, R0`, `RET` $\rightarrow$ `JR R7`.
+
+## Tools and Technologies
+
+* **Digital (by H. Neemann):** Digital logic schematic capture and cycle-accurate circuit simulation (`.dig`).
+* **Assembly / Machine Code:** Hand-assembled machine code and test programs for custom 16-bit instruction formats (R, I, M, B, J, JR types).
+* **AI-Assisted Engineering:** Leveraged LLMs for logic design brainstorming, edge-case test vector generation, and control signal verification.
+* **Git:** Version control and project artifact tracking.
+
+## Project Structure
+```text
+pars-16-processor/
+├── README.md
+├── src/                    # Schematic circuit files (.dig)
+│   ├── top.dig             # Top-level processor schematic
+│   ├── datapath.dig        # Datapath integration
+│   ├── alu.dig             # 16-bit ALU and flag generator
+│   ├── regfile.dig         # 8x16-bit Register File with debug ports
+│   └── control_unit.dig    # Main decoder and condition evaluation logic
+├── simulation/             # Test vectors and testbench setups
+│   ├── test_basic.dig
+│   └── test_programs.hex   # Machine code binaries for IMEM
+├── results/                # Waveforms, execution traces, and schematics
+└── docs/                   # Course assignment specification (CS_Project_v3.pdf)
+```
+## Results
+
+* Successfully verified all 16 instructions (arithmetic, logic, memory access LW/SW, immediate loading MOVI/LUI, and branching/jumps B/JAL/JR) with single-cycle execution.
+* Passed automated verification tests via the integrated hardware debug interface (DBG_EN, DBG_RSEL, MADDR_DBG).
+* Demonstrated correct program counter wrapping (mod 256), sign-extension operations, and predicated flag-update logic (S-bit gating).
+
+## My Contributions
+
+* Designed the complete 16-bit ALU supporting arithmetic, bitwise operations, and dynamic condition flag generation (Z, N, C, V).
+* Implemented the dual-read, single-write Register File with dedicated multiplexing for hardware debugging.
+* Developed the condition evaluation and hardwired control unit to gate write-enables and PC updates based on 2-bit condition codes.
+* Leveraged AI tools to accelerate edge-case test plan formulation, assembly test vector creation, and control-hazard debugging.
+* Validated end-to-end functionality across corner cases, subroutine linkages (JAL/JR), and memory operations.
+
+## Notes
+This project was completed as part of coursework at EE department, Sharif University of Technology.
