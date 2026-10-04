@@ -39,7 +39,7 @@ PARS-16 instructions are 16 bits wide, where bits `[15:14]` define the condition
 
 ## Tools and Technologies
 
-* **Digital (by H. Neemann):** Digital logic schematic capture and cycle-accurate circuit simulation (`.dig`).
+* **Digital (by H. Neemann)** — open-source logic simulator ([download](https://github.com/hneemann/Digital)): schematic capture and cycle-accurate circuit simulation (`.dig`).
 * **Assembly / Machine Code:** Hand-assembled machine code and test programs for custom 16-bit instruction formats (R, I, M, B, J, JR types).
 * **AI-Assisted Engineering:** Leveraged LLMs for logic design brainstorming, edge-case test vector generation, and control signal verification.
 
